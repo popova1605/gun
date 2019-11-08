@@ -5,11 +5,8 @@ class gr_ball(ball):
     balls = []
 
     def __init__(self, canv, x=40, y=450, vx=0, vy=0):
-        """ Конструктор класса ball
-
-        Args:
-        x - начальное положение мяча по горизонтали
-        y - начальное положение мяча по вертикали
+        """ Конструктор класса gr_ball
+        создаёт графический объект с рисунком мяча
         """
         super().__init__(x,y,vx,vy)
         self.color = choice(['blue', 'green', 'red', 'brown'])
@@ -33,11 +30,8 @@ class gr_ball(ball):
         )
 
     def move(self):
-        """Переместить мяч по прошествии единицы времени.
-
-        Метод описывает перемещение мяча за один кадр перерисовки. То есть, обновляет значения
-        self.x и self.y с учетом скоростей self.vx и self.vy, силы гравитации, действующей на мяч,
-        и стен по краям окна (размер окна 800х600).
+        """
+        Отображение движения мяча на экране
         """
         if super().move() == 0:
             self.disappear()
@@ -45,6 +39,7 @@ class gr_ball(ball):
         
 
     def disappear(self):
+        """Уничтожение мяча"""
         self.canv.delete(self.id)
         gr_ball.balls.remove(self)
 
@@ -55,7 +50,7 @@ class gr_gun(gun):
     guns = []
     
     def __init__(self, canv, root, x, y):
-        """"""
+        """Конструктор графической пушки"""
         super().__init__(x,y)
         self.id = canv.create_line(x, y, x+30, y-30, width=7)
         gr_gun.guns += [self]
@@ -67,10 +62,7 @@ class gr_gun(gun):
         self.targetting()
 
     def fire2_end(self, event):
-        """Выстрел мячом.
-
-        Происходит при отпускании кнопки мыши.
-        Начальные значения компонент скорости мяча vx и vy зависят от положения мыши.
+        """Выстрел мячом (графическое отображение)
         """
         global gr_ball
         super().fire2_end(event)
@@ -78,7 +70,7 @@ class gr_gun(gun):
                        0.5*gun.f2_power * math.cos(self.an), 0.5*gun.f2_power * math.sin(self.an))]
         self.targetting()
     def targetting(self, event=0):
-        """Прицеливание. Зависит от положения мыши."""
+        """Прицеливание. (графическое отображение)"""
         super().targetting(event)
         if gun.f2_on:
             self.canv.itemconfig(self.id, fill='orange')
@@ -116,7 +108,7 @@ class gr_target(target):
         self.move()
 
     def new_target(self):
-        """ Инициализация новой цели. """
+        """Графическая инициализация новой цели. """
         super().new_target()
         x = self.x
         y = self.y
@@ -143,10 +135,9 @@ class gr_target(target):
         
 
     def hit(self, points=1):
-        """Попадание шарика в цель."""
+        """Попадание шарика в цель.(графика)"""
         self.canv.coords(self.id, -10, -10, -10, -10)
         gr_target.points += points
         self.canv.itemconfig(gr_target.targets[0].id_points, text=gr_target.points)
-
 
 
