@@ -4,6 +4,18 @@ import math
 import time
 
 
+class const():
+    w_length = 0
+    w_height = 0
+    ball_size = 15
+    allowed_falls = 10
+    lost_energy_x = 0.8
+    lost_energy_y = 0.8
+    g = 1
+    start_gun_power = 10
+    finish_gun_power = 100
+    speed_of_rising_gun_power = 2
+
 class ball():
 
     balls = []
@@ -19,10 +31,10 @@ class ball():
         """
         self.x = x
         self.y = y
-        self.r = 15
+        self.r = const.ball_size
         self.vx = vx
         self.vy = vy
-        self.live = 7
+        self.live = const.allowed_falls
 
     def move(self):
         """Переместить мяч по прошествии единицы времени.
@@ -32,12 +44,18 @@ class ball():
         и стен по краям окна (размер окна 800х600).
         """
         l = 1
-        self.vy += 1
-        if self.y + self.r > 600:
+        self.vy += const.g
+        if self.y + self.r > const.w_height:
             self.vy = -abs(self.vy)
-            self.vy*=0.7
-            self.vx*=0.8
+            self.vy *= const.lost_energy_y
+            self.vx *= const.lost_energy_x
             self.live -= 1
+        if self.x + self.r > const.w_length:
+            self.vx = -abs(self.vx)
+        if self.y - self.r < 0:
+            self.vy = abs(self.vy)
+        if self.x - self.r < 0:
+            self.vx = abs(self.vx)
         
         self.x += self.vx
         self.y += self.vy
@@ -46,7 +64,6 @@ class ball():
             l = 0
         return l
         
-
     def hittest(self, obj):
         """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
 
@@ -61,12 +78,10 @@ class ball():
             return False
 
 
-
-
 class gun():
     
     f2_on = 0
-    f2_power = 10
+    f2_power = const.start_gun_power
     bullet = 0
     
     def __init__(self, x, y):
@@ -97,11 +112,10 @@ class gun():
             
     def power_up(self):
         if gun.f2_on:
-            if gun.f2_power < 100:
-                gun.f2_power += 1
+            if gun.f2_power < const.finish_gun_power:
+                gun.f2_power += const.speed_of_rising_gun_power
         else:
-            gun.f2_power = 10
-
+            gun.f2_power = const.start_gun_power
 
 
 class target():

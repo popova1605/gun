@@ -5,6 +5,8 @@ fr = tk.Frame(root)
 root.geometry('800x600')
 canv = tk.Canvas(root, bg='white')
 canv.pack(fill=tk.BOTH, expand=1)
+const.w_length = 800
+const.w_height = 600
 
 
 class game():
